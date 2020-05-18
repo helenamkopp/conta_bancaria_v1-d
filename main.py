@@ -23,6 +23,12 @@ class Historic:
             print("-", t)
 
 
+class TaxableMixIn:
+
+    def get_tax_amount(self):
+        pass
+
+
 class Account(abc.ABC):
 
     def __init__(self, number, client, balance=0, limit=1000.0):
@@ -77,7 +83,7 @@ class SavingAccount(Account):
         self._balance += self._balance * tax * 3
 
 
-class CheckingAccount(Account):
+class CheckingAccount(Account, TaxableMixIn):
 
     def __init__(self, number, client, balance, limit=1000.0):
         super().__init__(number, client, balance, limit)
@@ -92,3 +98,14 @@ class CheckingAccount(Account):
 class InvestmentAccount(Account):
     def update(self, tax):
         self._balance += self._balance * tax * 5
+
+
+class LifeInsurance(TaxableMixIn):
+    def __init__(self, amount, holder, number_insurance_policy):
+        self._amount = float(amount)
+        self._holder = str(holder)
+        self._number_insurance_policy = str(number_insurance_policy)
+
+    def get_tax_amount(self):
+        return 42 + self._amount * 0.05
+
